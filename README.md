@@ -1,5 +1,13 @@
 # native_sdk
 快发助手3.0 java sdk的native绑定，与2.0.4不通用
+
+如有疑问可以先看一下Demo的接入
+https://github.com/KuaiFaMaster/KuaifaCppDemo
+
+所有项目必须依赖此工程
+https://github.com/KuaiFaMaster/KFMaster_Java_SDK
+
+
 ------------------
 
 ##1.介绍
