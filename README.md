@@ -189,7 +189,7 @@
         void SDKKitPlateformCallBackImplWrapper_payCallBack(int retStatus, std::string s_retMessage,
                 std::string s_loginUserId, std::string s_loginAuthToken, std::string s_loginServerId, std::string s_payKitOrderId);
 
-        void SDKKitPlateformCallBackImplWrapper_getOrderResultCallBack(int retStatus, std::string s_retMessage);
+        // void SDKKitPlateformCallBackImplWrapper_getOrderResultCallBack(int retStatus, std::string s_retMessage); 此接口最新版本废弃
 
         void SDKKitPlateformCallBackImplWrapper_exitGameCallBack(int retStatus, std::string s_retMessage);
 
@@ -265,14 +265,6 @@
         function sdkkit_exitGame()
         ```
         
-    *   登录统计
-        ```lua
-        function sdkkit_onLogin(userId, serverId)
-
-        userId          :用户id
-        serverId        :服务器id
-        ```
-        
     *   支付统计
         ```lua
         function sdkkit_onPay(amount, serverId, serverName, userId, roleId, orderNumber, roleGrade)
@@ -298,17 +290,7 @@
         roleServerName  :角色所在服务器名称
         ```
         
-    *   上传区服和角色信息
-        ```lua
-        function sdkkit_onServerRoleInfo(roleId, roleName, roleLevel, serverId, serverName, rolePartyName, roleVipLevel)
 
-        roleId          :角色id
-        roleName        :角色名称
-        roleLevel       :角色等级
-        serverId        :服务器id
-        serverName      :服务器名称
-        rolePartyName   :角色工会名称
-        roleVipLevel    :角色vip等级
         ```
         
     *   按钮点击统计
