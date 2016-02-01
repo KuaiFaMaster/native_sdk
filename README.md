@@ -1,21 +1,26 @@
 # native_sdk
-快发助手2.1.0 java sdk的native绑定，与2.0.4不通用，但是可用于2.0.4的打包。
-
-
-
-![cocos2d-x](https://camo.githubusercontent.com/62f509218415e5f677180a479fd65cfe54a17f04/687474703a2f2f7777772e636f636f7332642d782e6f72672f6174746163686d656e74732f3830312f636f636f733264785f706f7274726169742e706e67)
-
-
-#快发大师c/c++/Lua接入文档
+快发助手3.0 java sdk的native绑定，与2.0.4不通用
 ------------------
 
 ##1.介绍
->   好接入为CP商提供一套第三方SDK接入解决方案，整个接入过程，不改变任何SDK的功能、特性、参数等，对于最终玩家而言是完全透明无感知的。 目的是让CP商能有更多时间更专注于游戏本身的品质，无需花费大量时间在对接第三方渠道上。
 
-![代码托管](http://ts2.mm.bing.net/th?id=HN.608047024633085982&w=154&h=153&c=7&rs=1&qlt=90&o=4&pid=1.7)
-[DEMO](https://github.com/openwayne/HJR_liblua_demo)
-[LIB](https://github.com/openwayne/liblua_sdkkit)
-    
+### 名词解释
+
+| 名词 | 解释 |
+| --- | --- |
+| 母包 | 母包＝纯净的游戏包＋快发sdk，也就是游戏接好快发sdk之后就是一个母包 |
+| 打包工具 | 快发提供的一个win/mac os打包客户端，渠道包由该工具进行生成 |
+| 签名文件 | 生成apk时需要使用的*.keystore文件 |
+
+### 前言
+
+业务功能、统计、生命周期函数模块如非特别标注“非必接”均表示默认为必接接口，推送、分享插件模块按照cp意愿，自愿选择是否接入；
+
+
+### 引入sdk
+
+以library的方式引入sdk库项目(lib_Platform_SDK_v版本号)
+以javalibrary的方式引入SdkkitNative项目
 
 ##2.接入流程
 ![流程](http://www.haojieru.com/ueditor/php/upload/image/20150211/1423620197362069.png)
@@ -39,10 +44,15 @@
 
     *   `application`节点内配置
 
+    SDK默认Application为:com.hjr.sdkkit.framework.mw.app.SDKBaseApplication;
+    如有自定义的Application:需要继承com.hjr.sdkkit.framework.mw.app.SDKBaseApplication;
+    将默认的或者是自定义的Application配置到AndroidManifest.xml中Applicataion节点的android:name当中;
+
+
     ```xml
         <application
             android:allowBackup="true"
-            android:name="com.hjr.sdkkit.bridge.app.HJRSDKKitBaseApplication"
+            android:name="Application为:com.hjr.sdkkit.framework.mw.app.SDKBaseApplication"
             android:icon="@drawable/ic_launcher"
             android:label="@string/app_name" >
             <activity
@@ -72,8 +82,8 @@
     ```
 
     *   `AndroidManifest.xml`配置注意事项
-        *   游戏如果有自己的`application`， 需要继承至`com.hjr.sdkkit.bridge.app.HJRSDKKitBaseApplication`，并且配置`android:name="你自己的Application"`中。
-        *   如果没有自己的`application`直接配置`android:name="com.hjr.sdkkit.bridge.app.HJRSDKKitBaseApplication"`中。
+        *   游戏如果有自己的`application`， 需要继承至`com.hjr.sdkkit.framework.mw.app.SDKBaseApplication`，并且配置`android:name="你自己的Application"`中。
+        *   如果没有自己的`application`直接配置`android:name="com.hjr.sdkkit.framework.mw.app.SDKBaseApplication"`中。
     *   程序内修改
         *   打开自己工程的main activity，添加以下代码至onCreate方法
             
@@ -87,7 +97,6 @@
                     plateformSDK = HJRSDKKitPlateformCore.initHJRPlateform(new SDKKitPlateformCallBackImplWrapper());
                     SDKKitPlateformBusinessImplWrapper.setContext(this, plateformSDK);
                     SDKKitPlatformCollectionsImplWrapper.setPlateform(plateformSDK, this);
-                    plateformSDK.Business.init(this);
                     SDKKitPlatformJniHelper.nativeSetContext(this);
                 }
                 
@@ -180,7 +189,7 @@
         void SDKKitPlateformCallBackImplWrapper_payCallBack(int retStatus, std::string s_retMessage,
                 std::string s_loginUserId, std::string s_loginAuthToken, std::string s_loginServerId, std::string s_payKitOrderId);
 
-        void SDKKitPlateformCallBackImplWrapper_getOrderResultCallBack(int retStatus, std::string s_retMessage);
+        // void SDKKitPlateformCallBackImplWrapper_getOrderResultCallBack(int retStatus, std::string s_retMessage); 此接口最新版本废弃
 
         void SDKKitPlateformCallBackImplWrapper_exitGameCallBack(int retStatus, std::string s_retMessage);
 
@@ -256,14 +265,6 @@
         function sdkkit_exitGame()
         ```
         
-    *   登录统计
-        ```lua
-        function sdkkit_onLogin(userId, serverId)
-
-        userId          :用户id
-        serverId        :服务器id
-        ```
-        
     *   支付统计
         ```lua
         function sdkkit_onPay(amount, serverId, serverName, userId, roleId, orderNumber, roleGrade)
@@ -289,17 +290,7 @@
         roleServerName  :角色所在服务器名称
         ```
         
-    *   上传区服和角色信息
-        ```lua
-        function sdkkit_onServerRoleInfo(roleId, roleName, roleLevel, serverId, serverName, rolePartyName, roleVipLevel)
 
-        roleId          :角色id
-        roleName        :角色名称
-        roleLevel       :角色等级
-        serverId        :服务器id
-        serverName      :服务器名称
-        rolePartyName   :角色工会名称
-        roleVipLevel    :角色vip等级
         ```
         
     *   按钮点击统计
@@ -321,12 +312,5 @@
         serverId        :服务器id
         serverName      :服务器名称
         ```
-        
-##5.技术支持
-点击访问：好接入开发者社区
-    
-QQ：940111913
-    
-Email：<support@haojieru.com>
-    
+
 为了尽快响应您的反馈，请提供您的gamekey及log中的详细出错日志，您所提供的内容越详细越有助于我们帮您解决问题。
