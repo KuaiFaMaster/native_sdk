@@ -33,7 +33,7 @@ public class SDKKitPlateformBusinessImplWrapper {
 
 			@Override
 			public void run() {
-				s_plateformSDK.Business.login(s_context);
+				s_plateformSDK.User.login(s_context);
 			}
 
 		});
@@ -92,7 +92,7 @@ public class SDKKitPlateformBusinessImplWrapper {
 				// 扩展参数
 				pc.putString(ParamsKey.KEY_EXTINFO, extInfo);
 				
-				s_plateformSDK.Business.pay(pc);
+				s_plateformSDK.Pay.pay(pc);
 			}
 
 		});
@@ -103,7 +103,7 @@ public class SDKKitPlateformBusinessImplWrapper {
 
 			@Override
 			public void run() {
-				s_plateformSDK.Business.userCenter();
+				s_plateformSDK.User.userCenter();
 			}
 
 		});
@@ -114,12 +114,13 @@ public class SDKKitPlateformBusinessImplWrapper {
 
 			@Override
 			public void run() {
-				s_plateformSDK.Business.logout();
+				s_plateformSDK.User.logout();
 			}
 
 		});
 	}
 
+	@Deprecated
 	public static void getOrderInfo(final String payOrderId) {
 		s_context.runOnUiThread(new Runnable() {
 
@@ -127,7 +128,7 @@ public class SDKKitPlateformBusinessImplWrapper {
 			public void run() {
 				ParamsContainer pc = new ParamsContainer();
 				pc.put(ParamsKey.KEY_PAY_ORDER_ID, payOrderId);
-				s_plateformSDK.Business.getOrderInfo(pc);
+				s_plateformSDK.Pay.getOrderInfo(pc);
 			}
 
 		});
@@ -150,14 +151,14 @@ public class SDKKitPlateformBusinessImplWrapper {
 
 			@Override
 			public void run() {
-				s_plateformSDK.Business.exitGame(s_context);
+				s_plateformSDK.Base.exitGame(s_context);
 			}
 
 		});
 	}
 	
 	public static String getCurrentLoginedUserInfo() {
-		JSONObject userInfo = s_plateformSDK.Business.getCurrentLoginedUserInfo();
+		JSONObject userInfo = s_plateformSDK.Base.getCurrentLoginedUserInfo();
 		return userInfo.toString();
 	}
 }

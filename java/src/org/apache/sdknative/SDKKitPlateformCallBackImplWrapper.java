@@ -148,4 +148,9 @@ public class SDKKitPlateformCallBackImplWrapper implements
 
 	private static native void exitGameCallBackJni(int retStatus,
 			String retMessage);
+
+	@Override
+	public void pushReceiveCallBack(int arg0, String arg1) {
+		
+	}
 }
